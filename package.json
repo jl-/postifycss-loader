@@ -1,0 +1,34 @@
+{
+  "name": "postifycss-loader",
+  "version": "0.0.0",
+  "description": "webpack loader for css purify and deduplicate",
+  "main": "loader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jl-/postifycss-loader.git"
+  },
+  "keywords": [
+    "webpack",
+    "loader",
+    "purifycss",
+    "css",
+    "duplicate",
+    "duplication",
+    "purify",
+    "deduplicate"
+  ],
+  "dependencies": {
+    "postcss": "^5.0.8",
+    "purify-css": "^1.0.17",
+    "loader-utils": "^0.2.11"
+  },
+  "author": "jl- <i.dragonxx@gmail.com> (http://jlxy.cz)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jl-/postifycss-loader/issues"
+  },
+  "homepage": "https://github.com/jl-/postifycss-loader"
+}
