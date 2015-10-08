@@ -5,6 +5,11 @@ var purifycss = require('purify-css');
 var RawSource = require('webpack/lib/RawSource');
 
 function PostifyCssPlugin(options) {
+  if (options.staticFiles) {
+    this.staticContent = [].concat(options.staticFiles).reduce(function(content, fileName) {
+      content += fs.readFileSync(fileName, 'utf8');
+    }, '');
+  }
 }
 
 function dedupe(root) {
@@ -26,7 +31,8 @@ function dedupe(root) {
 
 
 PostifyCssPlugin.prototype.apply = function(compiler) {
-  compiler.plugin('this-compilation', function(compilation) {
+  var staticContent = this.staticContent || '';
+  compiler.plugin('compilation', function(compilation) {
     compilation.plugin('optimize-tree', function(chunks, modules, cb) {
       var cssModules = modules.filter(function(module) {
         return module.chunks.length && path.extname(module.request) === '.css';
@@ -41,7 +47,7 @@ PostifyCssPlugin.prototype.apply = function(compiler) {
             }
           });
         });
-        compilation._purifycss_content = content;
+        compilation._purifycss_content = staticContent + content;
         compilation.rebuildModule(module, function(err) {
           if (err) console.log(err);
           rebuildModule(cb);
@@ -56,9 +62,8 @@ PostifyCssPlugin.prototype.apply = function(compiler) {
       if (path.extname(assetName) === '.css') {
         var asset = assets[assetName];
         var root = postcss.parse(asset.source(), {map: {prev: false}});
-        //var root = postcss.parse('a, b {color: red; width: 10px; color: red; color: red; color: red; width: 10px; height: 20px;} c {color: yellow;} d {color: red;} c {color: yellow;} e {color: blue;}');
         dedupe(root);
-        assets[assetName + '2.css'] = new RawSource(root.toResult().css);
+        assets[assetName + '.pf.css'] = new RawSource(root.toResult().css);
       }
     });
     cb();

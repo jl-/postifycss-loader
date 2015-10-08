@@ -1,6 +1,6 @@
 var purify = require('purify-css');
 var loaderUtils = require('loader-utils');
-var qs = require('querystring');
+var qs = require('qs');
 
 function loader(input) {
   var content = this._compilation._purifycss_content;

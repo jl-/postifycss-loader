@@ -23,7 +23,8 @@
   "dependencies": {
     "postcss": "^5.0.8",
     "purify-css": "^1.0.17",
-    "loader-utils": "^0.2.11"
+    "loader-utils": "^0.2.11",
+    "qs": "^5.2.0"
   },
   "author": "jl- <i.dragonxx@gmail.com> (http://jlxy.cz)",
   "license": "MIT",

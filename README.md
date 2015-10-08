@@ -1,8 +1,13 @@
-# webpack loader for css purify and deduplication
+### webpack loader for css purify and deduplication
 
 ---
 
+```bash
+npm install postifycss-loader --save-dev
+```
+
 ```js
+var PostifyCssPlugin = require('postifycss-loader/plugin');
 function makeStyleLoader(isDev, isLocal) {
   let baseLoader = `css?importLoaders=${isDev ? 2 : 3}${isLocal ? '&modules&localIdentName=[name]__[local]___[hash:base64:5]' : ''}!autoprefixer${isDev ? '' : '!postifycss'}!sass?${sassLoaderConf}`;
   let conf =  {
@@ -20,15 +25,14 @@ function makeStyleLoader(isDev, isLocal) {
   output:
   resolve:
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel'],
-      include: [PATHS.SRC]
-    }, makeStyleLoader(isDev, false), makeStyleLoader(isDev, true), {
-      test: /\.(eot|woff|woff2|ttf|svg|png|jpg)/,
-      loader: 'url?limit=30000&name=[name]-[hash].[ext]'
-    }]
-  }
+    loaders: [
+      makeStyleLoader(isDev, false),
+      makeStyleLoader(isDev, true)
+    ]
+  },
+  plugins: [new PostifyCssPlugin({staticContent: /*String|Array optional,absolute path of html or js files*/})]
 }
 
 ```
+
+case: 192kb -> 33kb
