@@ -1,4 +1,4 @@
-### webpack loader for css purify and deduplication
+### webpack loader for css purify and deduplicate, remove unused and duplicated css
 
 ---
 
@@ -8,8 +8,9 @@ npm install postifycss-loader --save-dev
 
 ```js
 var PostifyCssPlugin = require('postifycss-loader/plugin');
+
 function makeStyleLoader(isDev, isLocal) {
-  let baseLoader = `css?importLoaders=${isDev ? 2 : 3}${isLocal ? '&modules&localIdentName=[name]__[local]___[hash:base64:5]' : ''}!autoprefixer${isDev ? '' : '!postifycss'}!sass?${sassLoaderConf}`;
+  let baseLoader = `css?importLoaders=${isDev ? 2 : 3}${isLocal ? '&modules&localIdentName=[name]_[local]_[hash:base64:5]' : ''}!autoprefixer${isDev ? '' : '!postifycss?demodule=/statics/libs/'}!sass`;
   let conf =  {
     test: /\.(css|scss)$/,
     loader: isDev ? `style!${baseLoader}` : ExtractTextPlugin.extract('style', baseLoader, extractTextConf)
@@ -26,13 +27,26 @@ function makeStyleLoader(isDev, isLocal) {
   resolve:
   module: {
     loaders: [
-      makeStyleLoader(isDev, false),
-      makeStyleLoader(isDev, true)
+      makeStyleLoader(false, false),
     ]
   },
-  plugins: [new PostifyCssPlugin({staticContent: /*String|Array optional,absolute path of html or js files*/})]
+  plugins: [new PostifyCssPlugin({})]
 }
 
 ```
+---
+
+`!postifycss?query`
+  - `demodule` workaround for `css-loader?modules`, forced the matched css files not to be moduled(localed).
+
+---
+`new PostifyCssPlugin(options)`
+  - `staticContent` // String|Array [optional], absolute path of html or js files, contents will be concated and passed along to purifycss(contents,..);
+  - `override` // boolean [optional], whether to override the output bundle css file, default `false`.
+
+          `true` => emit the purified and deduplicated css file
+
+          `false` => emit (the purified file) and (the purified & deduplicated file with suffixed filename)
+  - `suffix` // string [optional], if `override!==true`, use this as the emited postified css filename suffix, default `.pf`;
 
 case: 192kb -> 33kb

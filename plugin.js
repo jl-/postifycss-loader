@@ -4,21 +4,24 @@ var postcss = require('postcss');
 var purifycss = require('purify-css');
 var RawSource = require('webpack/lib/RawSource');
 
-function PostifyCssPlugin(options) {
-  if (options.staticFiles) {
+function PostifyCssPlugin(opts) {
+  var options = this.options = {};
+  opts = opts || {};
+  options.suffix = !!opts.override ? '' : (opts.suffix || '.pf') + '.css';
+  if (opts.staticFiles) {
     this.staticContent = [].concat(options.staticFiles).reduce(function(content, fileName) {
       content += fs.readFileSync(fileName, 'utf8');
     }, '');
   }
 }
 
-function dedupe(root) {
+function deduplicate(root) {
   root.each(function (node) {
-    if (node.nodes) { dedupe(node); }
+    if (node.nodes) deduplicate(node);
   });
 
   root.each(function (node) {
-    if (node.type === 'comment') { return; }
+    if (node.type === 'comment') return;
 
     var nodeStr = node.toString();
     while (node = node.next()) {
@@ -31,7 +34,7 @@ function dedupe(root) {
 
 
 PostifyCssPlugin.prototype.apply = function(compiler) {
-  var staticContent = this.staticContent || '';
+  var staticContent = this.staticContent || '', suffix = this.options.suffix;
   compiler.plugin('compilation', function(compilation) {
     compilation.plugin('optimize-tree', function(chunks, modules, cb) {
       var cssModules = modules.filter(function(module) {
@@ -62,8 +65,8 @@ PostifyCssPlugin.prototype.apply = function(compiler) {
       if (path.extname(assetName) === '.css') {
         var asset = assets[assetName];
         var root = postcss.parse(asset.source(), {map: {prev: false}});
-        dedupe(root);
-        assets[assetName + '.pf.css'] = new RawSource(root.toResult().css);
+        deduplicate(root);
+        assets[assetName + suffix] = new RawSource(root.toResult().css);
       }
     });
     cb();

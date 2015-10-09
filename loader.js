@@ -5,7 +5,7 @@ var qs = require('qs');
 function loader(input) {
   var content = this._compilation._purifycss_content;
   this.cacheable && this.cacheable();
-  return typeof content === 'undefined' ? input : purify(content, input, {info: true, rejected: true});
+  return content ? purify(content, input, {info: true, rejected: true}) : input;
 }
 
 loader.pitch = function(remainingRequest, precedingRequest, data) {
@@ -28,3 +28,4 @@ loader.pitch = function(remainingRequest, precedingRequest, data) {
 };
 
 module.exports = loader;
+
