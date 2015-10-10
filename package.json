@@ -1,6 +1,6 @@
 {
   "name": "postifycss-loader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "webpack loader for css purify and deduplicate, remove unused and duplicated css",
   "main": "loader.js",
   "scripts": {
