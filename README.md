@@ -10,7 +10,7 @@ npm install postifycss-loader --save-dev
 var PostifyCssPlugin = require('postifycss-loader/plugin');
 
 function makeStyleLoader(isDev, isLocal) {
-  let baseLoader = `css?importLoaders=${isDev ? 2 : 3}${isLocal ? '&modules&localIdentName=[name]_[local]_[hash:base64:5]' : ''}!autoprefixer${isDev ? '' : '!postifycss}!sass`;
+  let baseLoader = `css?importLoaders=${isDev ? 2 : 3}${isLocal ? '&modules&localIdentName=[name]_[local]_[hash:base64:5]' : ''}!autoprefixer${isDev ? '' : '!postifycss'}!sass`;
   let conf =  {
     test: /\.(css|scss)$/,
     loader: isDev ? `style!${baseLoader}` : ExtractTextPlugin.extract('style', baseLoader, extractTextConf)
