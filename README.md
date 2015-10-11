@@ -1,4 +1,4 @@
-### webpack loader for css purify and deduplicate, remove unused and duplicated css
+### webpack loader for css purify and deduplication, remove unused and duplicated css rules
 
 ---
 
@@ -22,9 +22,6 @@ function makeStyleLoader(isDev, isLocal) {
 ...
 
 {
-  entry:
-  output:
-  resolve:
   module: {
     loaders: [
       makeStyleLoader(false, false),
@@ -46,3 +43,5 @@ function makeStyleLoader(isDev, isLocal) {
   - `suffix` // string [optional], if `override!==true`, use this as the emited postified css filename suffix, default `.pf`;
 
 case: 192kb -> 33kb
+
+#### the purify strategy is very similar to [purifycss-webpack-plugin](https://github.com/purifycss/purifycss-webpack-plugin), credits!
