@@ -44,4 +44,3 @@ function makeStyleLoader(isDev, isLocal) {
 
 case: 192kb -> 33kb
 
-#### the purify strategy is very similar to [purifycss-webpack-plugin](https://github.com/purifycss/purifycss-webpack-plugin), credits!
